@@ -3,13 +3,19 @@ package seedu.addressbook.data;
 import seedu.addressbook.data.person.*;
 import seedu.addressbook.data.person.UniquePersonList.*;
 import seedu.addressbook.data.tag.UniqueTagList;
+import seedu.addressbook.data.tag.Tagging.TagAction;
 import seedu.addressbook.data.tag.UniqueTagList.*;
 import seedu.addressbook.data.tag.Tag;
+import seedu.addressbook.data.tag.Tagging;
+
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+
 
 /**
  * Represents the entire address book. Contains the data of the address book.
@@ -22,7 +28,8 @@ public class AddressBook {
 
     private final UniquePersonList allPersons;
     private final UniqueTagList allTags; // can contain tags not attached to any person
-
+    private List<Tagging> tagHistory = new ArrayList<Tagging>();
+    
     /**
      * Creates an empty address book.
      */
@@ -68,7 +75,15 @@ public class AddressBook {
         }
         person.setTags(new UniqueTagList(commonTagReferences));
     }
-
+    
+    /**
+     * Put a new entry into the tagHistory list
+     */
+    public void addTagEntry (ReadOnlyPerson person, UniqueTagList tag, TagAction action){
+    	Tagging addTag = new Tagging(person, tag, action);
+    	tagHistory.add(addTag);
+    }
+    
     /**
      * Adds a person to the address book.
      * Also checks the new person's tags and updates {@link #allTags} with any new tags found,
@@ -79,6 +94,7 @@ public class AddressBook {
     public void addPerson(Person toAdd) throws DuplicatePersonException {
         syncTagsWithMasterList(toAdd);
         allPersons.add(toAdd);
+        addTagEntry(toAdd, toAdd.getTags(), TagAction.ADD);
     }
 
     /**
@@ -111,6 +127,7 @@ public class AddressBook {
      */
     public void removePerson(ReadOnlyPerson toRemove) throws PersonNotFoundException {
         allPersons.remove(toRemove);
+        addTagEntry(toRemove, toRemove.getTags(), TagAction.REMOVE);
     }
 
     /**
@@ -128,6 +145,7 @@ public class AddressBook {
     public void clear() {
         allPersons.clear();
         allTags.clear();
+        
     }
 
     /**
@@ -150,5 +168,9 @@ public class AddressBook {
                 || (other instanceof AddressBook // instanceof handles nulls
                         && this.allPersons.equals(((AddressBook) other).allPersons)
                         && this.allTags.equals(((AddressBook) other).allTags));
+    }
+    
+    public List<Tagging> getList() {
+    	return this.tagHistory;
     }
 }

@@ -8,10 +8,14 @@ import seedu.addressbook.data.AddressBook;
 import seedu.addressbook.parser.Parser;
 import seedu.addressbook.storage.StorageFile;
 import seedu.addressbook.ui.TextUi;
+import seedu.addressbook.data.tag.*;
+import seedu.addressbook.data.tag.Tagging.TagAction;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import javax.xml.crypto.Data;
 
 
 /**
@@ -72,7 +76,8 @@ public class Main {
 
     /** Prints the Goodbye message and exits. */
     private void exit() {
-        ui.showGoodbyeMessage();
+        
+    	ui.showGoodbyeMessage();
         System.exit(0);
     }
 
@@ -125,5 +130,17 @@ public class Main {
         return isStorageFileSpecifiedByUser ? new StorageFile(launchArgs[0]) : new StorageFile();
     }
 
-
+    private void printTagHistory() {
+    	ui.showToUser("Tag History: ");
+    	for(Tagging tagging : addressBook.getList()) {
+    		if (tagging.getTagAction() == TagAction.ADD){
+    			ui.showToUser("+ " + tagging.getPerson().getName() + 
+    					" " + tagging.getTag());
+    		} else {
+    			ui.showToUser("- " + tagging.getPerson().getName() + 
+    					" " + tagging.getTag());
+    		}
+    	}
+    }
 }
+
