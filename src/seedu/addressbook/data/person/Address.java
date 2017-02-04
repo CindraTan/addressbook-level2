@@ -14,7 +14,60 @@ public class Address {
 
     public final String value;
     private boolean isPrivate;
+    
+    public class Block {
+    	private final String block;
+    	
+    	public Block (String val) {
+    		block = val;
+    	}
 
+		private String getBlock() {
+			return block;
+		}	
+    }
+    
+    public class Street {
+    	private final String street;
+    	
+    	public Street (String val) {
+    		street = val;
+    	}
+
+		private String getStreet() {
+			return street;
+		}
+    }
+    
+    public class Unit {
+    	private final String unit;
+    	
+    	public Unit (String val) {
+    		unit = val;
+    	}
+
+		private String getUnit() {
+			return unit;
+		}
+    }
+    
+    public class postalCode {
+    	private final String postalcode;
+    	
+    	public postalCode (String val) {
+    		postalcode = val;
+    	}
+
+		private String getpostalCode() {
+			return postalcode;
+		}
+    }
+    
+    private Block block;
+    private Street street;
+    private Unit unit;
+    private postalCode postalcode;
+    
     /**
      * Validates given address.
      *
@@ -27,6 +80,12 @@ public class Address {
             throw new IllegalValueException(MESSAGE_ADDRESS_CONSTRAINTS);
         }
         this.value = trimmedAddress;
+        String [] parts = value.split(",");
+        block = new Block(parts[0]);
+        street = new Street(parts[1]);
+        unit = new Unit(parts[2]);
+        postalcode = new postalCode(parts[3]);
+        
     }
 
     /**
@@ -43,9 +102,19 @@ public class Address {
 
     @Override
     public boolean equals(Object other) {
-        return other == this // short circuit if same object
+        if (other == this) return true;
+    	if (other == null || !(other instanceof Address)) return false;
+    	if (this.block.equals(((Address)other).block) &&
+    			this.street.equals(((Address)other).street) &&
+    			this.unit.equals(((Address)other).unit) &&
+    			this.postalcode.equals(((Address)other).postalcode)) return true;
+    	return false;
+    	
+    	/*	
+    	return other == this // short circuit if same object
                 || (other instanceof Address // instanceof handles nulls
                 && this.value.equals(((Address) other).value)); // state check
+        */
     }
 
     @Override
@@ -57,3 +126,6 @@ public class Address {
         return isPrivate;
     }
 }
+
+
+
