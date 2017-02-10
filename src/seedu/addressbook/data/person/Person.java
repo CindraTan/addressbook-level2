@@ -18,7 +18,7 @@ public class Person implements ReadOnlyPerson {
     private final UniqueTagList tags;
     
     private int sequenceNumber;
-    private static int nextSequenceNumber = 0;
+    private static int nextSequenceNumber = 1;
     
     private int getSequenceNumber() {
 		return sequenceNumber;
