@@ -20,26 +20,6 @@ public class Email extends Contact {
      * @throws IllegalValueException if given email address string is invalid.
      */
     public Email(String email, boolean isPrivate) throws IllegalValueException {
-    	super(isPrivate);
-        String trimmedEmail = email.trim();
-        if (!isValidEmail(trimmedEmail)) {
-            throw new IllegalValueException(MESSAGE_EMAIL_CONSTRAINTS);
-        }
-        super.setValue(trimmedEmail);
-    }
-
-    /**
-     * Checks if a given string is a valid person email.
-     */
-    public static boolean isValidEmail(String test) {
-        return test.matches(EMAIL_VALIDATION_REGEX);
-    }
-
-
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof Email // instanceof handles nulls
-                && this.value.equals(((Email) other).value)); // state check
+    	super(email, isPrivate, MESSAGE_EMAIL_CONSTRAINTS, EMAIL_VALIDATION_REGEX);
     }
 }
